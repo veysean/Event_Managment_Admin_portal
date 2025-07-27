@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-    register,
+    adminRegister,
     login,
 
 } from '../controllers/loginController.js';
@@ -8,8 +8,7 @@ import {
 
 const router = express.Router();
 
-router.post('/register', register);
+router.post('/register', adminRegister);
 router.post('/login', login);
-//router.get('/admin', adminAuthenticateToken);
 
 export default router;

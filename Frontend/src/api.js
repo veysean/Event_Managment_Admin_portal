@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: 'http://localhost:4000/', //backend URL
+    baseURL: 'http://localhost:3000/', //backend URL
 });
 
 const token = localStorage.getItem('token');

@@ -6,6 +6,7 @@ import loginRoute from './routes/loginRoute.js';
 import venueRoute from './routes/venueRoute.js';
 import userRoute from './routes/userRoute.js';
 import EventRouter from './routes/bookingRoute.js';
+import cateringRoute from './routes/cateringRoute.js';
 
 dotenv.config();
 const app = express();
@@ -17,9 +18,10 @@ app.use(express.json());
 app.use('/docs', serveSwagger, setupSwagger);
 
 app.use('/auth', loginRoute);
-app.use('/venues', venueRoute);
+app.use('/api/venues', venueRoute);
 app.use('/users', userRoute);
 app.use('/events', EventRouter);
+app.use('/api/caterings', cateringRoute);
 
 app.get('/', (req, res) => res.send('Welcome to EventNa Management system API!'));
 

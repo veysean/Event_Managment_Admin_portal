@@ -28,7 +28,7 @@ import db from '../models/index.js';
  *         name: status
  *         schema:
  *           type: string
- *           enum: [pending, accepted, denied]
+ *           enum: [pending, accepted, denied, cancelled]
  *       - in: query
  *         name: populate
  *         schema:
@@ -41,6 +41,23 @@ import db from '../models/index.js';
 export const getAllEvents = async (req, res) => {
   const { date, venue, status, populate } = req.query;
   const total = await db.Event.count();
+
+  // Support comma-separated values for populate
+  const populateModels = populate?.split(',').map((model) => model.trim());
+
+  // Map valid model names to actual Sequelize models
+  const validModels = {
+    model: db.EventType, as: 'eventType',
+    model: db.Venue, as: 'venue',
+    model: db.Customer, as: 'customer'
+  };
+
+  const includes = populateModels
+    ? populateModels
+        .filter((key) => validModels[key])
+        .map((key) => ({ model: validModels[key] }))
+    : [];
+
   try {
     const events = await db.Event.findAll({
       where: {
@@ -48,7 +65,7 @@ export const getAllEvents = async (req, res) => {
         ...(venue && { venue }),
         ...(status && { status }),
       },
-      include: populate ? [{ model: db[populate] }] : [],
+      include: includes,
     });
 
     res.json({ total, events });
@@ -57,4 +74,3 @@ export const getAllEvents = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-

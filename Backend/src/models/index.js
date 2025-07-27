@@ -49,14 +49,15 @@ db.Customer.belongsTo(db.User, { foreignKey: 'userId' });
 db.User.hasOne(db.Attendee, { foreignKey: 'userId', onDelete: 'CASCADE' });
 db.Attendee.belongsTo(db.User, { foreignKey: 'userId' });
 
-db.Event.belongsTo(db.EventType, { foreignKey: 'eventTypeId' });
+db.Event.belongsTo(db.EventType, { foreignKey: 'eventTypeId', as: 'eventType' });
 db.EventType.hasMany(db.Event, { foreignKey: 'eventTypeId' });
 
-db.Event.belongsTo(db.Venue, { foreignKey: 'venueId' });
+db.Event.belongsTo(db.Venue, { foreignKey: 'venueId', as: 'venue' });
 db.Venue.hasMany(db.Event, { foreignKey: 'venueId' });
 
-db.Event.belongsTo(db.Customer, { foreignKey: 'custId' });
+db.Event.belongsTo(db.Customer, { foreignKey: 'custId', as: 'customer' });
 db.Customer.hasMany(db.Event, { foreignKey: 'custId' });
+
 
 db.Event.hasMany(db.Ticket, { foreignKey: 'eventId' });
 db.Ticket.belongsTo(db.Event, { foreignKey: 'eventId' });

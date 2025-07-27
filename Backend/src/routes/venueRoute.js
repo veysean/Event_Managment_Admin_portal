@@ -1,13 +1,19 @@
-import venueController from "../controllers/venueController.js";
+
 import { authenticateToken } from "../middlewares/auth.middleware.js";
 import express from 'express';
+import {
+    getAllVenues,
+    createVenue,
+    updateVenue,
+    deleteVenue
+} from '../controllers/venueController.js';
 
-const router = express.Router();
-router.use(authenticateToken);
+const VenueRouter = express.Router();
+VenueRouter.use(authenticateToken);
 
-router.get('/', venueController.getAllVenues);
-router.post('/', venueController.createVenue);
-router.put('/:id', venueController.updateVenue);
-router.delete('/:id', venueController.deleteVenue);
+VenueRouter.get('/', getAllVenues);
+VenueRouter.post('/', createVenue);
+VenueRouter.put('/:id', updateVenue);
+VenueRouter.delete('/:id', deleteVenue);
 
-export default router;
+export default VenueRouter;

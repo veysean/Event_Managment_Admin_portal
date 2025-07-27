@@ -4,7 +4,7 @@ export default (sequelize, DataTypes) => sequelize.define('Catering', {
     primaryKey: true,
     autoIncrement: true
   },
-  catering_set: {
+  cateringSet: {
     type: DataTypes.STRING(255),
     allowNull: false
   },

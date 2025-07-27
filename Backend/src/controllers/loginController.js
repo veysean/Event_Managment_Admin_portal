@@ -33,37 +33,32 @@ import jwt from 'jsonwebtoken';
  *       201:
  *         description: Course created
  */
-export const register = async (req, res) => {
-    const { username, email, password } = req.body;
+export const adminRegister = async (req, res) => {
+    const { email, password, username } = req.body;
 
-    if (!username || !email || !password) {
-        return res.status(400).json({message: 'All fields are requires'});
+    if (!username) {
+        return res.status(400).json({ error: 'Username is required' });
     }
 
     try {
-        const existingUser = await db.User.findOne({where: {email} });
-        if(existingUser) {
-            return res.status(400).json({message: 'Email already in use'});
-        }
+        const exists = await db.User.findOne({ where: { email } });
+        if (exists) return res.status(400).json({ error: 'Email already registered' });
+
+        //const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await db.User.create({
-            username,
             email,
-            password
+            password,
+            username,
+            role: 'admin' // assuming you're creating an admin
         });
 
         res.status(201).json({
-            message: 'User registered successfully',
-            user: {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                role: 'admin'
-            },
+            message: 'Admin registered',
+            user: { id: user.id, email: user.email, username: user.username, role: user.role }
         });
-    }
-    catch(err) {
-        res.status(500).json({error: err.message });
+    } catch (err) {
+        res.status(500).json({ error: 'Registration error', details: err.message });
     }
 };
 
@@ -114,37 +109,3 @@ export const login = async (req, res) => {
         res.status(500).json({ error: 'Login error', details: err.message });
     }
 };
-
-/**
- * @swagger
- * /auth/users:
- *   get:
- *     summary: Get list of all users (admin only)
- *     tags: [Authentication]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: List of users
- *       401:
- *         description: Unauthorized (missing or invalid token)
- *       403:
- *         description: Forbidden (not admin)
- */
-
-
-// export const adminAuthenticateToken = (req, res, next) => {
-//     const authHeader = req.headers['authorization'];
-//     const token = authHeader?.split(' ')[1];
-
-//     if (!token) return res.status(401).json({ error: 'Token missing' });
-
-//     try {
-//         const user = jwt.verify(token, process.env.JWT_SECRET);
-//         if (user.role !== 'admin') return res.status(403).json({ error: 'Access denied' });
-//         req.user = user;
-//         next();
-//     } catch {
-//         res.status(403).json({ error: 'Invalid or expired token' });
-//     }
-// };

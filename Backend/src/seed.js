@@ -88,7 +88,7 @@ async function seed() {
         console.log('Creating caterings...');
         const caterings = await db.Catering.bulkCreate(
             Array.from({ length: NUM_CATERINGS }, () => ({
-                catering_set: faker.commerce.productName(),
+                cateringSet: faker.commerce.productName(),
                 price: faker.finance.amount(10, 100, 2),
             }))
         );
@@ -99,13 +99,14 @@ async function seed() {
             Array.from({ length: NUM_EVENTS }, () => {
                 const startDate = faker.date.future();
                 const endDate = faker.date.future({ refDate: startDate });
+
                 return {
                     name: faker.lorem.words(3),
-                    startDate,
-                    end_date: endDate,
+                    startDate: startDate.toISOString().split('T')[0], // format as YYYY-MM-DD
+                    endDate: endDate.toISOString().split('T')[0],     // format as YYYY-MM-DD
                     desc: faker.lorem.paragraph(),
                     budget: faker.finance.amount(1000, 10000, 2),
-                    status: faker.helpers.arrayElement(['pending', 'denied', 'accepted']),
+                    status: faker.helpers.arrayElement(['pending', 'denied', 'accepted', 'cancelled']),
                     eventTypeId: faker.helpers.arrayElement(eventTypes).eventTypeId,
                     venueId: faker.helpers.arrayElement(venues).venueId,
                     custId: faker.helpers.arrayElement(customers).custId,
