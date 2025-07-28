@@ -88,7 +88,7 @@ export default function Catering() {
   return (
     <div className="container mx-auto px-4 py-8 relative">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Catering Management</h1>
+        <h1 className="text-slate-500 text-3xl font-semibold">Catering Management</h1>
         <button
           onClick={() => setShowAddForm(true)}
           className="px-6 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition"
@@ -109,31 +109,69 @@ export default function Catering() {
         </div>
       ) : (
         <div className="overflow-x-auto shadow-md rounded-lg">
-          <table className="min-w-full bg-white">
+          <table className="min-w-full bg-white table-fixed">
             <thead className="bg-gray-100">
               <tr>
-                <th className="py-3 px-6">ID</th>
-                <th className="py-3 px-6">Catering Set</th>
-                <th className="py-3 px-6">Price</th>
-                <th className="py-3 px-6">Actions</th>
+                <th className="py-3 px-6 w-1/6 text-start">ID</th>
+                <th className="py-3 px-6 w-2/6 text-start">Catering Set</th>
+                <th className="py-3 px-6 w-2/6 text-start">Price</th>
+                <th className="py-3 px-6 w-1/6 text-end">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {caterings.map((item) => (
                 <tr key={item.cateringId} className="hover:bg-gray-50">
-                  <td className="py-4 px-6">{item.cateringId}</td>
+                  <td className="py-4 px-6 ">{item.cateringId}</td>
                   <td className="py-4 px-6">{item.cateringSet}</td>
                   <td className="py-4 px-6">${parseFloat(item.price).toFixed(2)}</td>
-                  <td className="py-4 px-6 space-x-2">
-                    <button onClick={() => setSelectedCatering(item)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
-                    <button onClick={() => setShowUpdateForm(item)} className="bg-amber-500 text-white px-3 py-1 rounded hover:bg-amber-600">Update</button>
-                    <button onClick={() => handleDelete(item.cateringId)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                  <td className="py-4 px-6">
+                    <div className="flex justify-end relative">
+                      <button
+                        className="inline-flex items-center px-3 py-1 text-sm font-medium bg-slate-500 text-white rounded hover:bg-slate-600"
+                        onClick={() => document.getElementById(`catering-menu-${item.cateringId}`).classList.toggle("hidden")}
+                      >
+                        Actions ▾
+                      </button>
+                      <div
+                        id={`catering-menu-${item.cateringId}`}
+                        className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg hidden z-10"
+                      >
+                        <button
+                          onClick={() => {
+                            setSelectedCatering(item);
+                            document.getElementById(`catering-menu-${item.cateringId}`).classList.add("hidden");
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50"
+                        >
+                          View
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowUpdateForm(item);
+                            document.getElementById(`catering-menu-${item.cateringId}`).classList.add("hidden");
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-amber-600 hover:bg-amber-50"
+                        >
+                          Update
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleDelete(item.cateringId);
+                            document.getElementById(`catering-menu-${item.cateringId}`).classList.add("hidden");
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
       )}
 
       {(showAddForm || selectedCatering || showUpdateForm) && (
