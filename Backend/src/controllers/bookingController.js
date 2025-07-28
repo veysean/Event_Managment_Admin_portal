@@ -4,11 +4,17 @@ import db from '../models/index.js';
  * @swagger
  * /api/events:
  *   get:
- *     summary: Retrieve all events or filter by eventType name, custId, venueId, status
+ *     summary: Retrieve all events or filter by eventId, eventType name, custId, venueId, status
  *     tags: [Events]
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: query
+ *         name: eventId
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Filter events by event ID
  *       - in: query
  *         name: eventType
  *         schema:
@@ -53,7 +59,7 @@ import db from '../models/index.js';
  *         name: sortBy
  *         schema:
  *           type: string
- *           enum: [EventId,name, budget]
+ *           enum: [EventId, name, budget]
  *           default: EventId
  *         required: false
  *         description: Field to sort by
@@ -70,71 +76,7 @@ import db from '../models/index.js';
  *         description: A list of events or filtered events
  *       500:
  *         description: Server error
- */
-
-const validStatuses = ['pending', 'denied', 'accepted', 'cancelled'];
-const validEventTypes = ['Conference', 'Workshop', 'Seminar', 'Concert', 'Festival'];
-const validSortFields = ['EventId','name', 'budget'];
-const validSortOrders = ['ASC', 'DESC'];
-
-export const getEvents = async (req, res) => {
-  try {
-    const {
-      eventType,
-      custId,
-      venueId,
-      status,
-      limit = 10,
-      offset = 0,
-      sortBy = 'EventId',
-      sortOrder = 'ASC'
-    } = req.query;
-
-    const filters = {};
-    if (custId) filters.custId = custId;
-    if (venueId) filters.venueId = venueId;
-    if (status && validStatuses.includes(status)) {
-      filters.status = status;
-    } else if (status) {
-      return res.status(400).json({ message: 'Invalid status value' });
-    }
-
-    const include = [];
-    if (eventType) {
-      if (!validEventTypes.includes(eventType)) {
-        return res.status(400).json({ message: 'Invalid event type value' });
-      }
-      include.push({
-        model: db.EventType,
-        as: 'eventType',
-        where: { name: eventType }
-      });
-    } else {
-      include.push({ model: db.EventType, as: 'eventType' });
-    }
-
-    const order = validSortFields.includes(sortBy)
-      ? [[sortBy, validSortOrders.includes(sortOrder.toUpperCase()) ? sortOrder.toUpperCase() : 'ASC']]
-      : [['startDate', 'ASC']];
-
-    const events = await db.Event.findAll({
-      where: filters,
-      include,
-      limit: parseInt(limit),
-      offset: parseInt(offset),
-      order
-    });
-
-    res.status(200).json(events);
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    res.status(500).json({ message: 'Server error while fetching events' });
-  }
-};
-
-
-/**
- * @swagger
+ *
  * /api/events/{id}:
  *   put:
  *     summary: Partially update an existing event by ID
@@ -188,6 +130,76 @@ export const getEvents = async (req, res) => {
  *         description: Server error
  */
 
+const validStatuses = ['pending', 'denied', 'accepted', 'cancelled'];
+const validEventTypes = ['Conference', 'Workshop', 'Seminar', 'Concert', 'Festival'];
+const validSortFields = ['EventId', 'name', 'budget'];
+const validSortOrders = ['ASC', 'DESC'];
+
+export const getEvents = async (req, res) => {
+  try {
+    const {
+      eventId,
+      eventType,
+      custId,
+      venueId,
+      status,
+      limit = 10,
+      offset = 0,
+      sortBy = 'EventId',
+      sortOrder = 'ASC'
+    } = req.query;
+
+    const filters = {};
+    if (eventId) filters.EventId = eventId;
+    if (custId) filters.custId = custId;
+    if (venueId) filters.venueId = venueId;
+    if (status && validStatuses.includes(status)) {
+      filters.status = status;
+    } else if (status) {
+      return res.status(400).json({ message: 'Invalid status value' });
+    }
+
+    const include = [
+      {
+        model: db.EventType,
+        as: 'eventType',
+        ...(eventType && validEventTypes.includes(eventType)
+          ? { where: { name: eventType } }
+          : {})
+      },
+      {
+        model: db.Venue,
+        as: 'venue'
+      },
+      {
+        model: db.Catering,
+        as: 'catering'
+      }
+    ];
+
+    if (eventType && !validEventTypes.includes(eventType)) {
+      return res.status(400).json({ message: 'Invalid event type value' });
+    }
+
+    const order = validSortFields.includes(sortBy)
+      ? [[sortBy, validSortOrders.includes(sortOrder.toUpperCase()) ? sortOrder.toUpperCase() : 'ASC']]
+      : [['startDate', 'ASC']];
+
+    const events = await db.Event.findAll({
+      where: filters,
+      include,
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      order
+    });
+
+    res.status(200).json(events);
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    res.status(500).json({ message: 'Server error while fetching events' });
+  }
+};
+
 export const updateEvent = async (req, res) => {
   const { id } = req.params;
   const updates = req.body || {};
@@ -197,28 +209,27 @@ export const updateEvent = async (req, res) => {
     if (!event) {
       return res.status(404).json({ error: 'Event not found' });
     }
-    // Remove empty string fields
+
     Object.keys(updates).forEach((key) => {
       if (updates[key] === '') {
         delete updates[key];
       }
     });
 
-    // Validate status
-    if (updates.status && !['pending', 'denied', 'accepted', 'cancelled'].includes(updates.status)) {
+    if (updates.status && !validStatuses.includes(updates.status)) {
       return res.status(400).json({ error: 'Invalid status value' });
     }
-    // Validate date logic
+
     if (updates.startDate && updates.endDate) {
       if (new Date(updates.endDate) <= new Date(updates.startDate)) {
         return res.status(400).json({ error: 'End date must be after start date' });
       }
     }
-    // Validate budget
+
     if (updates.budget !== undefined && parseFloat(updates.budget) <= 0) {
       return res.status(400).json({ error: 'Budget must be a non-negative number' });
     }
-    // Convert numeric fields
+
     ['budget', 'eventTypeId', 'venueId', 'custId'].forEach((field) => {
       if (updates[field]) {
         updates[field] = Number(updates[field]);
@@ -226,7 +237,14 @@ export const updateEvent = async (req, res) => {
     });
 
     await event.update(updates);
-    const updatedEvent = await db.Event.findByPk(id);
+
+    const updatedEvent = await db.Event.findByPk(id, {
+      include: [
+        { model: db.EventType, as: 'eventType' },
+        { model: db.Venue, as: 'venue' },
+        { model: db.Catering, as: 'catering' }
+      ]
+    });
 
     res.status(200).json({
       message: 'Event updated successfully',
