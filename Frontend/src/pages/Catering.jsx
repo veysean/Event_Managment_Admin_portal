@@ -122,12 +122,12 @@ export default function Catering() {
               {caterings.map((item) => (
                 <tr key={item.cateringId} className="hover:bg-gray-50">
                   <td className="py-4 px-6 ">{item.cateringId}</td>
-                  <td className="py-4 px-6">{item.cateringSet}</td>
-                  <td className="py-4 px-6">${parseFloat(item.price).toFixed(2)}</td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-6 text-sm font-medium text-gray-900">{item.cateringSet}</td>
+                  <td className="py-4 px-6 text-sm text-gray-600">${parseFloat(item.price).toFixed(2)}</td>
+                  <td className="py-4 px-6 text-sm text-gray-600">
                     <div className="flex justify-end relative">
                       <button
-                        className="inline-flex items-center px-3 py-1 text-sm font-medium bg-slate-500 text-white rounded hover:bg-slate-600"
+                        className="inline-flex items-center px-3 py-1 text-sm font-medium bg-green-500 text-white rounded hover:bg-green-200"
                         onClick={() => document.getElementById(`catering-menu-${item.cateringId}`).classList.toggle("hidden")}
                       >
                         Actions ▾

@@ -6,6 +6,8 @@ import db from '../models/index.js';
  *   get:
  *     summary: Retrieve all events or filter by eventType name, custId, venueId, status
  *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: eventType
@@ -137,6 +139,8 @@ export const getEvents = async (req, res) => {
  *   put:
  *     summary: Partially update an existing event by ID
  *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -241,6 +245,8 @@ export const updateEvent = async (req, res) => {
  *   delete:
  *     summary: Delete an event by ID
  *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

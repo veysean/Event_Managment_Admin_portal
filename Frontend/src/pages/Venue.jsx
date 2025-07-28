@@ -124,15 +124,15 @@ export default function Venue() {
           <tbody className="divide-y divide-gray-200">
             {venues.map((v) => (
               <tr key={v.venueId} className="hover:bg-gray-50">
-                <td className="py-4 px-6">{v.venueId}</td>
-                <td className="py-4 px-6">{v.name}</td>
-                <td className="py-4 px-6">{v.location}</td>
-                <td className="py-4 px-6">{v.max_occupancy}</td>
-                <td className="py-4 px-6">{v.email}</td>
-                <td className="py-4 px-6">
+                <td className="py-4 px-6 text-sm text-gray-600">{v.venueId}</td>
+                <td className="py-4 px-6 text-sm font-medium text-gray-900">{v.name}</td>
+                <td className="py-4 px-6 text-sm text-gray-600">{v.location}</td>
+                <td className="py-4 px-6 text-sm text-gray-600">{v.max_occupancy}</td>
+                <td className="py-4 px-6 text-sm text-gray-600">{v.email}</td>
+                <td className="py-4 px-6 text-sm text-gray-600">
                     <div className="relative inline-block text-left">
                         <button
-                        className="inline-flex justify-center w-full px-3 py-1 text-sm font-medium bg-slate-500 text-white rounded hover:bg-slate-600"
+                        className="inline-flex justify-center w-full px-3 py-1 text-sm font-medium bg-green-500 text-white rounded hover:bg-green-200"
                         onClick={() => document.getElementById(`menu-${v.venueId}`).classList.toggle("hidden")}
                         >
                         Actions ▾
