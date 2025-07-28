@@ -13,6 +13,8 @@ import db from '../models/index.js';
  *   get:
  *     summary: Retrieve all catering sets or filter by cateringId
  *     tags: [Catering]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: cateringId
@@ -48,7 +50,7 @@ export const getCaterings = async (req, res) => {
   try {
     const { cateringId } = req.query;
 
-    const whereClause = cateringId ? { cateringId } : undefined;
+    const whereClause = cateringId ? { cateringId } : {};
 
     const caterings = await db.Catering.findAll({ where: whereClause });
 
@@ -65,6 +67,8 @@ export const getCaterings = async (req, res) => {
  *   post:
  *     summary: Create a new catering set
  *     tags: [Catering]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -129,6 +133,8 @@ export const createCatering = async (req, res) => {
  *   put:
  *     summary: Update an existing catering set (partial update supported)
  *     tags: [Catering]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -185,6 +191,8 @@ export const updateCatering = async (req, res) => {
  *   delete:
  *     summary: Delete a catering set by ID
  *     tags: [Catering]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

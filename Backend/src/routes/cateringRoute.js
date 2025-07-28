@@ -8,7 +8,7 @@ import {
 } from '../controllers/cateringController.js';
 
 const CateringRouter = express.Router();
-//CateringRouter.use(authenticateToken);
+CateringRouter.use(authenticateToken);
 
 CateringRouter.get('/', getCaterings);
 CateringRouter.post('/', createCatering);

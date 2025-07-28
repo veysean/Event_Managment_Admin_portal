@@ -13,6 +13,8 @@ import db from '../models/index.js';
  *   get:
  *     summary: Retrieve all venues or filter by venueId
  *     tags: [Venues]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: venueId
@@ -78,6 +80,8 @@ export const getAllVenues = async (req, res) => {
  *   post:
  *     summary: Create a new venue
  *     tags: [Venues]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -152,6 +156,8 @@ export const createVenue = async (req, res) => {
  *   put:
  *     summary: Update an existing venue (partial update supported)
  *     tags: [Venues]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -215,6 +221,8 @@ export const updateVenue = async (req, res) => {
  *   delete:
  *     summary: Delete a venue
  *     tags: [Venues]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
