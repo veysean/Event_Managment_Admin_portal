@@ -121,7 +121,7 @@ export default function Catering() {
             <tbody className="divide-y divide-gray-200">
               {caterings.map((item) => (
                 <tr key={item.cateringId} className="hover:bg-gray-50">
-                  <td className="py-4 px-6 ">{item.cateringId}</td>
+                  <td className="py-4 px-6 text-sm text-gray-600">{item.cateringId}</td>
                   <td className="py-4 px-6 text-sm font-medium text-gray-900">{item.cateringSet}</td>
                   <td className="py-4 px-6 text-sm text-gray-600">${parseFloat(item.price).toFixed(2)}</td>
                   <td className="py-4 px-6 text-sm text-gray-600">

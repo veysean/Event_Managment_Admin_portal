@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
+import EventRow from "../components/EventRow.jsx";
 
 export default function Event() {
     const [events, setEvents] = useState([]);
@@ -15,7 +16,7 @@ export default function Event() {
         const fetchEvents = async () => {
             try {
                 const response = await API.get("api/events");
-                setEvents(response.data); 
+                setEvents(response.data.events || []); 
                 setError(null);
             } catch (err) {
                 console.error("Error fetching events:", err);
@@ -54,9 +55,9 @@ export default function Event() {
 
     const handleView = (event) => {
     setSelectedEvent(event);
-    // Maybe navigate or open a modal
+    
     };
-
+    // Update event
     const handleUpdate = (event) => {
     setShowUpdateForm(event);
     };
@@ -70,7 +71,7 @@ export default function Event() {
         console.error("Delete failed:", err);
     }
     };
-
+    //loading state
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -176,58 +177,13 @@ export default function Event() {
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {filteredEvents.map((event) => (
-                                <tr key={event.eventId} className="hover:bg-gray-50 transition-colors">
-                                    <td className="py-4 px-6 text-sm text-gray-500">{event.eventId}</td>
-                                    <td className="py-4 px-6 text-sm font-medium text-gray-900">{event.name}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-700">{new Date(event.startDate).toLocaleDateString()}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-700">{new Date(event.endDate).toLocaleDateString()}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-700">${parseFloat(event.budget).toFixed(2)}</td>
-                                    <td className="py-4 px-6 text-sm capitalize text-gray-700">{event.status}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-600">
-                                        <div className="flex justify-end relative">
-                                            <button
-                                            className="inline-flex items-center px-3 py-1 text-sm font-medium bg-green-500 text-white rounded hover:bg-slate-400"
-                                            onClick={() =>
-                                                document.getElementById(`event-menu-${event.eventId}`).classList.toggle("hidden")
-                                            }
-                                            >
-                                            Actions ▾
-                                            </button>
-                                            <div
-                                            id={`event-menu-${event.eventId}`}
-                                            className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg hidden z-10"
-                                            >
-                                            <button
-                                                onClick={() => {
-                                                handleView(event);
-                                                document.getElementById(`event-menu-${event.eventId}`).classList.add("hidden");
-                                                }}
-                                                className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50"
-                                            >
-                                                View
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                handleUpdate(event);
-                                                document.getElementById(`event-menu-${event.eventId}`).classList.add("hidden");
-                                                }}
-                                                className="block w-full text-left px-4 py-2 text-sm text-amber-600 hover:bg-amber-50"
-                                            >
-                                                Update
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                handleDelete(event.eventId);
-                                                document.getElementById(`event-menu-${event.eventId}`).classList.add("hidden");
-                                                }}
-                                                className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                                            >
-                                                Delete
-                                            </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <EventRow
+                                key={event.eventId}
+                                event={event}
+                                onView={handleView}
+                                onUpdate={handleUpdate}
+                                onDelete={handleDelete}
+                                />
                             ))}
                         </tbody>
                     </table>

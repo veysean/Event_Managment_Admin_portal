@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
+import EventRow from "../components/EventRow.jsx";
 
 export default function Dashboard() {
   const [summary, setSummary] = useState({
@@ -47,27 +48,69 @@ export default function Dashboard() {
 
   fetchData();
 }, []);
+const handleView = (event) => {
+    setSelectedEvent(event);
+    // Maybe navigate or open a modal
+    };
+
+    const handleUpdate = (event) => {
+    setShowUpdateForm(event);
+    };
+
+    //delete event
+    const handleDelete = async (id) => {
+    try {
+        await API.delete(`/api/events/${id}`);
+        setEvents((prev) => prev.filter((item) => item.id !== id));
+    } catch (err) {
+        console.error("Delete failed:", err);
+    }
+    };
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4 text-gray-700">Dashboard overview</h1>
+      <h1 className="text-slate-500 text-3xl font-semibold">Dashboard overview</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <Card title="Pending Event" count={summary.pending} />
         <Card title="Accepted Event" count={summary.accepted} />
         <Card title="Denied Event" count={summary.denied} />
       </div>
 
       <h2 className="text-lg font-semibold text-gray-700 mb-3">Recent requested Event</h2>
-        <div className="space-y-4">
-        {events.length === 0 ? (
-          <div className="text-gray-500">No recent events found.</div>
-        ) : (
-          events.map((event) => (
-            <EventCard key={event.eventId} event={event} />
-          ))
-        )}
-      </div>
+      {events.length === 0 ? (
+        <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4">
+            <p>No events found. Create a new event to get started.</p>
+        </div>
+    ) : (
+        <div className="overflow-x-auto shadow-md rounded-lg">
+            <table className="min-w-full bg-white">
+                <thead className="bg-gray-100">
+                    <tr>
+                        <th className="py-3 px-6 text-left ">ID</th>
+                        <th className="py-3 px-6 text-left ">Name</th>
+                        <th className="py-3 px-6 text-left ">Start Date</th>
+                        <th className="py-3 px-6 text-left ">End Date</th>
+                        <th className="py-3 px-6 text-left ">Budget</th>
+                        <th className="py-3 px-6 text-left ">Status</th>
+                        <th className="py-3 px-6 text-end ">Actions</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                    {events.map((event) => (
+                        <EventRow
+                        key={event.eventId}
+                        event={event}
+                        onView={handleView}
+                        onUpdate={handleUpdate}
+                        onDelete={handleDelete}
+                        />
+                    ))}
+                </tbody>
+            </table>
+        </div>
+      )}
+
     </div>
   );
 }
