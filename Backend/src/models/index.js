@@ -80,7 +80,7 @@ db.Catering.belongsToMany(db.Event, {
     otherKey: 'eventId'
 });
 
-db.Employee.belongsTo(db.Role, { foreignKey: 'roleId' });
+db.Employee.belongsTo(db.Role, { foreignKey: 'roleId', as: 'role' });
 db.Role.hasMany(db.Employee, { foreignKey: 'roleId' });
 
 db.Employee.belongsToMany(db.Event, { 
