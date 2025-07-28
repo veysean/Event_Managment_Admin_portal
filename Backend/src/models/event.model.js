@@ -4,12 +4,12 @@ export default (sequelize, DataTypes) =>
         eventId: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
         name: { type: DataTypes.STRING(255), allowNull: false }, 
         startDate: { type: DataTypes.DATEONLY, allowNull: false },
-        end_date: {
+        endDate: {
             type: DataTypes.DATEONLY,
             allowNull: false,
             validate: {
             isAfterStartDate(value) {
-                if (value <= this.start_date) {
+                if (value <= this.startDate) {
                 throw new Error('End date must be after start date');
                 }
             }
