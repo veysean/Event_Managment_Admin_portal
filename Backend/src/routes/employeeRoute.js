@@ -11,7 +11,7 @@ import { authenticateToken } from "../middlewares/auth.middleware.js";
 import { upload } from "../config/multerConfig.js";
 
 const EmployeeRoute = express.Router();
-EmployeeRoute.use(authenticateToken);
+//EmployeeRoute.use(authenticateToken);
 
 EmployeeRoute.get('/', getEmployees);
 EmployeeRoute.post('/', upload.none(), createEmployee);

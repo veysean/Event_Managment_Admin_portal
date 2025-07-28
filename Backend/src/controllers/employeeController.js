@@ -9,6 +9,12 @@ import db from '../models/index.js';
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Filter employees by ID
+ *       - in: query
  *         name: role
  *         schema:
  *           type: string
@@ -72,7 +78,10 @@ import db from '../models/index.js';
  */
 export const getEmployees = async (req, res) => {
   try {
-    const { role, limit = 10, offset = 0 } = req.query;
+    const { id, role, limit = 10, offset = 0 } = req.query;
+
+    const where = {};
+    if (id) where.empId = id;
 
     const roleFilter = role ? { role_name: role } : undefined;
 
@@ -83,8 +92,8 @@ export const getEmployees = async (req, res) => {
       where: roleFilter
     }];
 
-    // Use findAndCountAll instead of separate count and findAll
     const { count: total, rows: employees } = await db.Employee.findAndCountAll({
+      where,
       include,
       limit: parseInt(limit),
       offset: parseInt(offset)
@@ -101,6 +110,8 @@ export const getEmployees = async (req, res) => {
     res.status(500).json({ message: 'Server error while fetching employees' });
   }
 };
+
+
 
 /**
  * @swagger

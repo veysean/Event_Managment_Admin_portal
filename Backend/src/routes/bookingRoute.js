@@ -8,7 +8,7 @@ import {
 import { authenticateToken } from '../middlewares/auth.middleware.js';
 import { upload } from "../config/multerConfig.js";
 const EventRouter = express.Router();    
-EventRouter.use(authenticateToken);
+//EventRouter.use(authenticateToken);
 
 EventRouter.get('/', getEvents);
 EventRouter.delete('/:id', deleteEvent);

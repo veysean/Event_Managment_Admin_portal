@@ -71,7 +71,8 @@ db.SoldTicket.belongsTo(db.Attendee, { foreignKey: 'attendeeId' });
 db.Event.belongsToMany(db.Catering, { 
     through: db.EventCatering, 
     foreignKey: 'eventId',
-    otherKey: 'cateringId'
+    otherKey: 'cateringId',
+    as: 'catering'
 });
 
 db.Catering.belongsToMany(db.Event, { 
