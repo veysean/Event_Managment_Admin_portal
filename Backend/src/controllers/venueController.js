@@ -49,6 +49,10 @@ import db from '../models/index.js';
  *                   phone:
  *                     type: string
  *                     example: "+85512345678"
+ *                   imageUrl:
+ *                     type: string
+ *                     format: uri
+ *                     example: "/uploads/16273829123-grandhall.jpg"
  *       500:
  *         description: Server error
  */
@@ -81,7 +85,7 @@ export const getAllVenues = async (req, res) => {
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -107,6 +111,9 @@ export const getAllVenues = async (req, res) => {
  *               phone:
  *                 type: string
  *                 example: "+85512345678"
+ *               image:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Venue created successfully
@@ -118,6 +125,7 @@ export const getAllVenues = async (req, res) => {
 
 export const createVenue = async (req, res) => {
     const { name, location, max_occupancy, email, phone } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!name || !location || !max_occupancy || !email || !phone) {
         return res.status(400).json({ error: 'All fields are required' });
@@ -134,7 +142,8 @@ export const createVenue = async (req, res) => {
             location,
             max_occupancy,
             email,
-            phone
+            phone,
+            imageUrl
         });
 
         res.status(201).json({
@@ -162,7 +171,7 @@ export const createVenue = async (req, res) => {
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -174,11 +183,18 @@ export const createVenue = async (req, res) => {
  *                 type: integer
  *               email:
  *                 type: string
+ *                 format: email
  *               phone:
  *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Optional image file to upload
  *     responses:
  *       200:
  *         description: Venue updated successfully
+ *       400:
+ *         description: Invalid input (e.g., bad email or phone format)
  *       404:
  *         description: Venue not found
  *       500:
@@ -189,6 +205,7 @@ export const createVenue = async (req, res) => {
 export const updateVenue = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
+    const imageFile = req.file;
 
     try {
         const venue = await db.Venue.findByPk(id);
@@ -196,7 +213,37 @@ export const updateVenue = async (req, res) => {
             return res.status(404).json({ error: 'Venue not found' });
         }
 
-        // Only update fields that are provided
+        Object.keys(updates).forEach((key) => {
+            if (updates[key] === '') {
+                delete updates[key];
+            }
+        });
+
+        // Validate email if provided
+        if (updates.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updates.email)) {
+            return res.status(400).json({ error: 'Invalid email format' });
+        }
+
+        // Validate phone if provided
+        if (updates.phone && !/^\+?[0-9\s\-]{7,15}$/.test(updates.phone)) {
+            return res.status(400).json({ error: 'Invalid phone number format' });
+        }
+
+        // Validate max_occupancy if provided
+        if (updates.max_occupancy) {
+            const occupancy = parseInt(updates.max_occupancy);
+            if (isNaN(occupancy) || occupancy < 1) {
+                return res.status(400).json({ error: 'max_occupancy must be a positive number' });
+            }
+            updates.max_occupancy = occupancy;
+        }
+
+        // Handle image upload
+        if (imageFile) {
+            updates.imageUrl = `/uploads/${imageFile.filename}`;
+        }
+
+        // Perform the update
         await venue.update(updates);
 
         res.status(200).json({

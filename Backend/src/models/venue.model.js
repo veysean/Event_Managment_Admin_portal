@@ -6,7 +6,9 @@ export default (sequelize, DataTypes) =>
         max_occupancy: { type: DataTypes.INTEGER, allowNull: false, validate: { min: 1 } },
         email: { type: DataTypes.STRING(255), unique: true, validate: { isEmail: true } },
         phone: { type: DataTypes.STRING(25), allowNull: false },
-    }, {
+        imageUrl: { type: DataTypes.STRING(512), allowNull: true}
+    }, 
+    {
         timestamps: false,
         tableName: 'venues'
     });

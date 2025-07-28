@@ -194,9 +194,7 @@ export const updateCatering = async (req, res) => {
 
         if (price !== undefined && price !== '' && !isNaN(parseFloat(price))) {
             updates.price = parseFloat(price);
-      }
-
-
+        }
 
         if (imageFile) {
             updates.imageUrl = `/uploads/${imageFile.filename}`;
