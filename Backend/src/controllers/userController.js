@@ -11,7 +11,7 @@ import db from '../models/index.js';
 
 /**
  * @swagger
- * /users/register:
+ * /api/users/register:
  *   post:
  *     summary: Register a new user
  *     tags: [Users]
@@ -72,7 +72,7 @@ export const register = async (req, res) => {
 
 /**
  * @swagger
- * /users/login:
+ * /api/users/login:
  *   post:
  *     summary: Login a user
  *     tags: [Users]

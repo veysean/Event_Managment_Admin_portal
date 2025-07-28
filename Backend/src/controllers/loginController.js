@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken';
 
 /**
  * @swagger
- * /auth/register:
+ * /api/auth/register:
  *   post:
  *     summary: Create a new admin user
  *     tags: [Authentication]
@@ -64,7 +64,7 @@ export const adminRegister = async (req, res) => {
 
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/login:
  *   post:
  *     summary: Login as admin
  *     tags: [Authentication]

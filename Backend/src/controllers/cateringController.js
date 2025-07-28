@@ -42,6 +42,10 @@ import db from '../models/index.js';
  *                     type: number
  *                     format: decimal
  *                     example: 45.99
+ *                   imageUrl:
+ *                     type: string
+ *                     format: uri
+ *                     example: "/uploads/16273829123-premium.jpg"
  *       500:
  *         description: Server error
  */
@@ -60,19 +64,18 @@ export const getCaterings = async (req, res) => {
   }
 };
 
-
 /**
  * @swagger
  * /api/caterings:
  *   post:
- *     summary: Create a new catering set
+ *     summary: Create a new catering set with image
  *     tags: [Catering]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -86,6 +89,9 @@ export const getCaterings = async (req, res) => {
  *                 type: number
  *                 format: decimal
  *                 example: 25.50
+ *               image:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Catering set created successfully
@@ -104,6 +110,10 @@ export const getCaterings = async (req, res) => {
  *                   type: number
  *                   format: decimal
  *                   example: 25.50
+ *                 imageUrl:
+ *                   type: string
+ *                   format: uri
+ *                   example: "/uploads/16273829123-standard.jpg"
  *       400:
  *         description: Missing required fields
  *       500:
@@ -114,12 +124,13 @@ export const getCaterings = async (req, res) => {
 export const createCatering = async (req, res) => {
   try {
     const { cateringSet, price } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!cateringSet || price === undefined) {
-      return res.status(400).json({ error: 'catering_set and price are required.' });
+      return res.status(400).json({ error: 'cateringSet and price are required.' });
     }
 
-    const newCatering = await db.Catering.create({ cateringSet, price });
+    const newCatering = await db.Catering.create({ cateringSet, price, imageUrl });
 
     res.status(201).json(newCatering);
   } catch (error) {
@@ -131,7 +142,7 @@ export const createCatering = async (req, res) => {
  * @swagger
  * /api/caterings/{id}:
  *   put:
- *     summary: Update an existing catering set (partial update supported)
+ *     summary: Update an existing catering set (partial update supported, including image upload)
  *     tags: [Catering]
  *     security:
  *       - bearerAuth: []
@@ -145,15 +156,21 @@ export const createCatering = async (req, res) => {
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               cateringSet:
  *                 type: string
+ *                 description: Name of the catering set
  *               price:
  *                 type: number
  *                 format: decimal
+ *                 description: Price of the catering set
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Image file to upload
  *     responses:
  *       200:
  *         description: Catering updated successfully
@@ -163,14 +180,32 @@ export const createCatering = async (req, res) => {
  *         description: Server error
  */
 
+
 export const updateCatering = async (req, res) => {
     const { id } = req.params;
-    const updates = req.body;
+    const { cateringSet, price } = req.body;
+    const imageFile = req.file;
 
     try {
         const catering = await db.Catering.findByPk(id);
         if (!catering) {
             return res.status(404).json({ error: 'Catering not found' });
+        }
+
+        const updates = {};
+
+        if (cateringSet !== undefined && cateringSet !== '') {
+            updates.cateringSet = cateringSet;
+        }
+
+        if (price !== undefined && price !== '' && !isNaN(parseFloat(price))) {
+            updates.price = parseFloat(price);
+      }
+
+
+
+        if (imageFile) {
+            updates.imageUrl = `/uploads/${imageFile.filename}`;
         }
 
         await catering.update(updates);

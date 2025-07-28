@@ -9,7 +9,7 @@ import db from '../models/index.js';
 
 /**
  * @swagger
- * /events:
+ * /api/events:
  *   get:
  *     summary: get all event bookings
  *     tags: [Events]

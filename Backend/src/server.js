@@ -17,10 +17,10 @@ app.use(express.json());
 
 app.use('/docs', serveSwagger, setupSwagger);
 
-app.use('/auth', loginRoute);
+app.use('/api/auth', loginRoute);
 app.use('/api/venues', venueRoute);
-app.use('/users', userRoute);
-app.use('/events', EventRouter);
+app.use('/api/users', userRoute);
+app.use('/api/events', EventRouter);
 app.use('/api/caterings', cateringRoute);
 
 app.get('/', (req, res) => res.send('Welcome to EventNa Management system API!'));
