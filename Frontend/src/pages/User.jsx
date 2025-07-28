@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import API from "../api";
+import CustomerList from "../components/CustomerList.jsx";
+import EmployeeList from "../components/EmployeeList.jsx";
 
 export default function User() {
     const [user, setUser] = useState(null);
@@ -72,13 +74,13 @@ export default function User() {
       {/* Content */}
       {activeTab === "employee" ? (
         <div>
-          {/* Replace with your employee list or form */}
-          <p className="text-gray-700">Employee list goes here...</p>
+          {/* Employee List Component */}
+          <EmployeeList />
         </div>
       ) : (
         <div>
-          {/* Replace with your customer list or form */}
-          <p className="text-gray-700">Customer list goes here...</p>
+          {/* Customer List Component */}
+          <CustomerList />
         </div>
       )}
     </div>

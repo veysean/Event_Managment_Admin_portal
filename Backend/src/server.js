@@ -9,6 +9,7 @@ import EventRouter from './routes/bookingRoute.js';
 import cateringRoute from './routes/cateringRoute.js';
 import CustomerRoute from './routes/customerRoute.js';
 import EmployeeRoute from './routes/employeeRoute.js';
+import roleRoute from './routes/roleRoute.js';
 
 dotenv.config();
 const app = express();
@@ -26,6 +27,7 @@ app.use('/api/events', EventRouter);
 app.use('/api/caterings', cateringRoute);
 app.use('/api/customers', CustomerRoute);
 app.use('/api/employees', EmployeeRoute);
+app.use('/api/roles', roleRoute);
 
 app.get('/', (req, res) => res.send('Welcome to EventNa Management system API!'));
 
