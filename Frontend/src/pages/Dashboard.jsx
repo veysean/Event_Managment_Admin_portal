@@ -19,9 +19,9 @@ export default function Dashboard() {
      const fetchData = async () => {
     try {
       const [pendingRes, acceptedRes, deniedRes] = await Promise.all([
-        API.get("/events?status=pending", { headers }),
-        API.get("/events?status=accepted", { headers }),
-        API.get("/events?status=denied", { headers }),
+        API.get("api/events?status=pending", { headers }),
+        API.get("api/events?status=accepted", { headers }),
+        API.get("api/events?status=denied", { headers }),
       ]);
 
       

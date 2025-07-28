@@ -9,7 +9,7 @@ import {
 import { upload } from "../config/multerConfig.js";
 
 const CateringRouter = express.Router();
-//CateringRouter.use(authenticateToken);
+CateringRouter.use(authenticateToken);
 
 CateringRouter.get('/', getCaterings);
 CateringRouter.post('/', upload.single('image'), createCatering);

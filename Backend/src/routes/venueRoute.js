@@ -10,7 +10,7 @@ import {
 import { upload } from "../config/multerConfig.js";
 
 const VenueRouter = express.Router();
-//VenueRouter.use(authenticateToken);
+VenueRouter.use(authenticateToken);
 
 VenueRouter.get('/', getAllVenues);
 VenueRouter.post('/', upload.single('image'), createVenue);
