@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
 import EventRow from "../components/EventRow.jsx";
+import EventDetail from "../components/EventDetail.jsx";
+import UpdateEventForm from "../components/UpdateEventForm.jsx";
 
 export default function Dashboard() {
   const [summary, setSummary] = useState({
@@ -8,7 +10,7 @@ export default function Dashboard() {
     accepted: 0,
     denied: 0,
   });
-
+  const [eventToUpdate, setEventToUpdate] = useState(null);
   const [events, setEvents] = useState([]);
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -54,7 +56,24 @@ const handleView = (event) => {
     };
 
     const handleUpdate = (event) => {
-    setShowUpdateForm(event);
+    setEventToUpdate(event);
+    };
+        //handle save update
+    const handleSaveUpdate = async (updatedEventData) => {
+    try {
+        await API.put(`/api/events/${eventToUpdate.eventId}`, updatedEventData);
+        const updatedEvents = events.map((evt) =>
+        evt.eventId === eventToUpdate.eventId ? { ...evt, ...updatedEventData } : evt
+        );
+        setEvents(updatedEvents);
+        setEventToUpdate(null); // Close the form
+    } catch (error) {
+        console.error("Update failed:", error);
+    }
+    };
+    //handle cancel update
+    const handleCancelUpdate = () => {
+    setEventToUpdate(null);
     };
 
     //delete event
@@ -111,6 +130,13 @@ const handleView = (event) => {
             </table>
         </div>
       )}
+      {eventToUpdate && (
+              <UpdateEventForm
+                  event={eventToUpdate}
+                  onSave={handleSaveUpdate}
+                  onCancel={handleCancelUpdate}
+              />
+              )}
       </div>
       {/* <div className="my-6">
         <h2 className="text-lg font-semibold text-gray-700 mb-3">Quick Access</h2>
