@@ -12,19 +12,15 @@ export default function Dashboard() {
   });
   const [eventToUpdate, setEventToUpdate] = useState(null);
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
 
      const fetchData = async () => {
     try {
       const [pendingRes, acceptedRes, deniedRes] = await Promise.all([
-        API.get("api/events?status=pending", { headers }),
-        API.get("api/events?status=accepted", { headers }),
-        API.get("api/events?status=denied", { headers }),
+        API.get("api/events?status=pending"),
+        API.get("api/events?status=accepted"),
+        API.get("api/events?status=denied"),
       ]);
 
       
@@ -130,6 +126,12 @@ const handleView = (event) => {
             </table>
         </div>
       )}
+       {selectedEvent && (
+              <EventDetail
+                  event={selectedEvent}
+                  onClose={() => setSelectedEvent(null)}
+              />
+              )}
       {eventToUpdate && (
               <UpdateEventForm
                   event={eventToUpdate}
