@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import API from "../api";
 import EventRow from "../components/EventRow.jsx";
 import EventDetail from "../components/EventDetail.jsx";
+import UpdateEventForm from "../components/UpdateEventForm.jsx";
 export default function Event() {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,6 +13,7 @@ export default function Event() {
     const [searchQuery, setSearchQuery] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [eventToUpdate, setEventToUpdate] = useState(null);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -60,7 +62,25 @@ export default function Event() {
     };
     // Update event
     const handleUpdate = (event) => {
-    setShowUpdateForm(event);
+    setEventToUpdate(event);
+    };
+
+    //handle save update
+    const handleSaveUpdate = async (updatedEventData) => {
+    try {
+        await API.put(`/api/events/${eventToUpdate.eventId}`, updatedEventData);
+        const updatedEvents = events.map((evt) =>
+        evt.eventId === eventToUpdate.eventId ? { ...evt, ...updatedEventData } : evt
+        );
+        setEvents(updatedEvents);
+        setEventToUpdate(null); // Close the form
+    } catch (error) {
+        console.error("Update failed:", error);
+    }
+    };
+    //handle cancel update
+    const handleCancelUpdate = () => {
+    setEventToUpdate(null);
     };
 
     //delete event
@@ -195,7 +215,14 @@ export default function Event() {
             event={selectedEvent}
             onClose={() => setSelectedEvent(null)}
         />
-)}
+        )}
+        {eventToUpdate && (
+        <UpdateEventForm
+            event={eventToUpdate}
+            onSave={handleSaveUpdate}
+            onCancel={handleCancelUpdate}
+        />
+        )}
         </div>
     );
 }
