@@ -62,9 +62,7 @@ export default function Catering() {
         );
         setShowUpdateForm(null);
       } else {
-        res = await API.post("api/caterings", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        res = await API.post("api/caterings", formData);
         setCaterings((prev) => [...prev, res.data]);
         setShowAddForm(false);
       }
@@ -112,10 +110,10 @@ export default function Catering() {
           <table className="min-w-full bg-white table-fixed">
             <thead className="bg-gray-100">
               <tr>
-                <th className="py-3 px-6 w-1/6 text-start">ID</th>
-                <th className="py-3 px-6 w-2/6 text-start">Catering Set</th>
-                <th className="py-3 px-6 w-2/6 text-start">Price</th>
-                <th className="py-3 px-6 w-1/6 text-end">Actions</th>
+                <th className="py-3 px-6 w-1/6 text-start text-sm font-semibold text-gray-600">ID</th>
+                <th className="py-3 px-6 w-2/6 text-start text-sm font-semibold text-gray-600">Catering Set</th>
+                <th className="py-3 px-6 w-2/6 text-start text-sm font-semibold text-gray-600">Price</th>
+                <th className="py-3 px-6 w-1/6 text-end text-sm font-semibold text-gray-600">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -175,8 +173,8 @@ export default function Catering() {
       )}
 
       {(showAddForm || selectedCatering || showUpdateForm) && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center bg-opacity-70">
-          <div className="bg-white rounded-lg p-6 w-full max-w-xl mx-4 border border-gray-300 shadow-lg">
+        <div className="fixed inset-0 z-50 flex justify-center items-center bg-opacity-70 drop-shadow-xl">
+          <div className="bg-white rounded-lg p-6 w-full max-w-xl mx-4 border border-gray-300">
             {(showAddForm || showUpdateForm) && (
               <>
                 <h2 className=" text-slate-500  text-xl font-extrabold font-['Inter'] underline pb-4 justify-center text-center">
@@ -228,7 +226,7 @@ export default function Catering() {
                   />
                 )}
                 <div className="flex flex-col gap-2">
-                  <h2 className=" text-slate-500 text-xl font-extrabold font-['Inter'] underline">Catering Details</h2>
+                  <h2 className=" text-slate-500 text-xl text-center font-extrabold font-['Inter'] underline">Catering Details</h2>
                   <p><strong className="text-slate-700 font-normal font-['Inter']">ID:</strong> {selectedCatering.cateringId}</p>
                   <p><strong className="text-slate-700 font-normal font-['Inter']">Set:</strong> {selectedCatering.cateringSet}</p>
                   <p><strong className="text-slate-700 font-normal font-['Inter']">Price:</strong> ${selectedCatering.price}</p>

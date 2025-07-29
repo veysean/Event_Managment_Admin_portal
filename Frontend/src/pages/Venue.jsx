@@ -113,12 +113,12 @@ export default function Venue() {
         <table className="min-w-full bg-white">
           <thead className="bg-gray-100">
             <tr>
-              <th className="py-3 px-6 text-start">ID</th>
-              <th className="py-3 px-6 text-start">Name</th>
-              <th className="py-3 px-6 text-start">Location</th>
-              <th className="py-3 px-6 text-start">Occupancy</th>
-              <th className="py-3 px-6 text-start">Email</th>
-              <th className="py-3 px-6 text-end">Actions</th>
+              <th className="py-3 px-6 text-start text-sm font-semibold text-gray-600">ID</th>
+              <th className="py-3 px-6 text-start text-sm font-semibold text-gray-600">Name</th>
+              <th className="py-3 px-6 text-start text-sm font-semibold text-gray-600">Location</th>
+              <th className="py-3 px-6 text-start text-sm font-semibold text-gray-600">Occupancy</th>
+              <th className="py-3 px-6 text-start text-sm font-semibold text-gray-600">Email</th>
+              <th className="py-3 px-6 text-end text-sm font-semibold text-gray-600">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -178,7 +178,7 @@ export default function Venue() {
       </div>
 
       {(showAddForm || selectedVenue || showUpdateForm) && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center bg-opacity-70">
+        <div className="fixed inset-0 z-50 flex justify-center items-center bg-opacity-70 drop-shadow-xl">
           <div className="bg-white rounded-lg p-6 w-full max-w-xl mx-4 border border-gray-300 shadow-lg">
             {(showAddForm || showUpdateForm) && (
               <>
@@ -251,25 +251,31 @@ export default function Venue() {
                 </form>
               </>
             )}
-
             {selectedVenue && (
               <div className="flex flex-col gap-2">
-                {selectedVenue.imageUrl && (
+                <div className="flex gap-4">
+                <div>
+                  {selectedVenue.imageUrl && (
                   <img
                     src={`http://localhost:4000${selectedVenue.imageUrl}`}
                     alt="Venue Preview"
                     className="w-full md:w-64 h-auto rounded border border-slate-100 shadow-lg mb-4"
                   />
                 )}
-                <h2 className="text-slate-500 text-xl font-extrabold underline">
-                  Venue Details
-                </h2>
-                <p><strong>ID:</strong> {selectedVenue.venueId}</p>
-                <p><strong>Name:</strong> {selectedVenue.name}</p>
-                <p><strong>Location:</strong> {selectedVenue.location}</p>
-                <p><strong>Max Occupancy:</strong> {selectedVenue.max_occupancy}</p>
-                <p><strong>Email:</strong> {selectedVenue.email}</p>
-                <p><strong>Phone:</strong> {selectedVenue.phone}</p>
+                </div> 
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-slate-500 text-center text-xl font-extrabold underline">
+                    Venue Details
+                  </h2>
+                  <p><strong>ID:</strong> {selectedVenue.venueId}</p>
+                  <p><strong>Name:</strong> {selectedVenue.name}</p>
+                  <p><strong>Location:</strong> {selectedVenue.location}</p>
+                  <p><strong>Max Occupancy:</strong> {selectedVenue.max_occupancy}</p>
+                  <p><strong>Email:</strong> {selectedVenue.email}</p>
+                  <p><strong>Phone:</strong> {selectedVenue.phone}</p>
+                </div>
+                </div>
+                
                 <button
                   onClick={() => setSelectedVenue(null)}
                   className="mt-6 px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"

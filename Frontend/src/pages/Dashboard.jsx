@@ -68,6 +68,7 @@ const handleView = (event) => {
     };
 
   return (
+    <>
     <div className="p-6">
       <h1 className="text-slate-500 text-3xl font-semibold">Dashboard overview</h1>
 
@@ -87,13 +88,13 @@ const handleView = (event) => {
             <table className="min-w-full bg-white">
                 <thead className="bg-gray-100">
                     <tr>
-                        <th className="py-3 px-6 text-left ">ID</th>
-                        <th className="py-3 px-6 text-left ">Name</th>
-                        <th className="py-3 px-6 text-left ">Start Date</th>
-                        <th className="py-3 px-6 text-left ">End Date</th>
-                        <th className="py-3 px-6 text-left ">Budget</th>
-                        <th className="py-3 px-6 text-left ">Status</th>
-                        <th className="py-3 px-6 text-end ">Actions</th>
+                        <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">ID</th>
+                        <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">Name</th>
+                        <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">Start Date</th>
+                        <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">End Date</th>
+                        <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">Budget</th>
+                        <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">Status</th>
+                        <th className="py-3 px-6 text-end text-sm font-semibold text-gray-600">Actions</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -110,8 +111,31 @@ const handleView = (event) => {
             </table>
         </div>
       )}
-
-    </div>
+      </div>
+      {/* <div className="my-6">
+        <h2 className="text-lg font-semibold text-gray-700 mb-3">Quick Access</h2>
+          <div className="flex flex-wrap gap-4">
+            <button
+            
+              className="px-6 py-2 bg-slate-600 text-white rounded-full hover:bg-slate-700 transition"
+            >
+              Add New Employee
+            </button>
+            <button
+          
+              className="px-6 py-2 bg-slate-600 text-white rounded-full hover:bg-slate-700 transition"
+            >
+              Add New Venue
+            </button>
+            <button
+            
+              className="px-6 py-2 bg-slate-600 text-white rounded-full hover:bg-slate-700 transition"
+            >
+              Add New Catering
+            </button>
+          </div>
+      </div> */}
+    </>
   );
 }
 

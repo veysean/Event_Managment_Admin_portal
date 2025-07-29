@@ -40,6 +40,7 @@ export default function EventRow({ event, onView, onUpdate, onDelete }) {
               onClick={() => {
                 onView(event);
                 closeMenu();
+              
               }}
               className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50"
             >

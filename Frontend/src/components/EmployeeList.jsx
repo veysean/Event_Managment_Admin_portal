@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import API from "../api"; 
 import AddEmployeeForm from "./AddEmployeeForm.jsx";
+import EmployeeDetail from "../components/EmployeeDetail.jsx";
 
 export default function EmployeeList() {
   const [employees, setEmployees] = useState([]);
@@ -10,6 +11,7 @@ export default function EmployeeList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const fetchEmployees = async (pageOffset = 0) => {
     setLoading(true);
@@ -42,6 +44,16 @@ export default function EmployeeList() {
     const prevOffset = offset - limit;
     if (prevOffset >= 0) {
       fetchEmployees(prevOffset);
+    }
+  };
+
+  //handle delete employee
+  const handleDelete = async (empId) => {
+    try{
+      await API.delete(`/api/employees/${empId}`);
+      fetchEmployees(offset); // Refresh the list after deletion
+    }catch(err){
+      console.error("Error deleting employee:", err);
     }
   };
 
@@ -108,6 +120,13 @@ export default function EmployeeList() {
                     <td className="py-4 px-6 text-sm text-gray-700">${parseFloat(emp.salary).toFixed(2)}</td>
                     <td className="py-4 px-6 text-sm text-gray-600">
                     <div className="flex justify-end relative">
+                      {selectedEmployee && (
+                        <EmployeeDetail
+                          employee={selectedEmployee}
+                          onClose={() => setSelectedEmployee(null)}
+                        />
+                      )}
+
                       <button
                         className="inline-flex items-center px-3 py-1 text-sm font-medium bg-green-500 text-white rounded hover:bg-green-200"
                         onClick={() => document.getElementById(`employee-menu-${emp.empId}`).classList.toggle("hidden")}
@@ -139,6 +158,7 @@ export default function EmployeeList() {
                         </button>
                         <button
                           onClick={() => {
+                            handleDelete(emp.empId);
                             document.getElementById(`employee-menu-${emp.empId}`).classList.add("hidden");
                           }}
                           className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"

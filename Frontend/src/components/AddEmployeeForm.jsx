@@ -148,11 +148,11 @@ export default function AddEmployeeForm({ onClose, onSuccess }) {
           />
           <button
             type="submit"
-            className="bg-slate-600 text-white px-6 py-2 rounded-full hover:bg-slate-700 transition"
+            className="bg-slate-600 text-white px-6 py-2 rounded hover:bg-slate-700 transition"
           >
             Confirm
           </button>
-          <button type="button" onClick={onClose} className="bg-gray-300 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-400 transition">
+          <button type="button" onClick={onClose} className="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400 transition">
             Cancel
           </button>
         </div>

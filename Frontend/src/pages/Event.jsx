@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
 import EventRow from "../components/EventRow.jsx";
-
+import EventDetail from "../components/EventDetail.jsx";
 export default function Event() {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -11,6 +11,7 @@ export default function Event() {
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [suggestions, setSuggestions] = useState([]);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -166,12 +167,12 @@ export default function Event() {
                     <table className="min-w-full bg-white">
                         <thead className="bg-gray-100">
                             <tr>
-                                <th className="py-3 px-6 text-left ">ID</th>
-                                <th className="py-3 px-6 text-left ">Name</th>
-                                <th className="py-3 px-6 text-left ">Start Date</th>
-                                <th className="py-3 px-6 text-left ">End Date</th>
-                                <th className="py-3 px-6 text-left ">Budget</th>
-                                <th className="py-3 px-6 text-left ">Status</th>
+                                <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">ID</th>
+                                <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">Name</th>
+                                <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">Start Date</th>
+                                <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">End Date</th>
+                                <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">Budget</th>
+                                <th className="py-3 px-6 text-left text-sm font-semibold text-gray-600">Status</th>
                                 <th className="py-3 px-6 text-end ">Actions</th>
                             </tr>
                         </thead>
@@ -189,6 +190,12 @@ export default function Event() {
                     </table>
                 </div>
             )}
+        {selectedEvent && (
+        <EventDetail
+            event={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+        />
+)}
         </div>
     );
 }
