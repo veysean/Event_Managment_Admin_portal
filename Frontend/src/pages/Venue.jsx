@@ -257,7 +257,7 @@ export default function Venue() {
                 <div>
                   {selectedVenue.imageUrl && (
                   <img
-                    src={`http://localhost:4000${selectedVenue.imageUrl}`}
+                    src={`http://localhost:3000${selectedVenue.imageUrl}`}
                     alt="Venue Preview"
                     className="w-full md:w-64 h-auto rounded border border-slate-100 shadow-lg mb-4"
                   />

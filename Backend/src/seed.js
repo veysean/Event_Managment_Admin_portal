@@ -152,6 +152,7 @@ async function seed() {
                 eventCaterings.push({
                     eventId: event.eventId,
                     cateringId: catering.cateringId,
+                    num_of_set: faker.number.int({ min: 1, max: 5 }),
                 });
             }
         }

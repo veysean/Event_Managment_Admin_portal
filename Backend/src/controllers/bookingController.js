@@ -143,7 +143,7 @@ export const getEvents = async (req, res) => {
       custId,
       venueId,
       status,
-      limit = 10,
+      limit = 30,
       offset = 0,
       sortBy = 'EventId',
       sortOrder = 'ASC'

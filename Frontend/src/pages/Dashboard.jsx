@@ -9,6 +9,7 @@ export default function Dashboard() {
     pending: 0,
     accepted: 0,
     denied: 0,
+    total: 0,
   });
   const [eventToUpdate, setEventToUpdate] = useState(null);
   const [events, setEvents] = useState([]);
@@ -17,10 +18,11 @@ export default function Dashboard() {
 
      const fetchData = async () => {
     try {
-      const [pendingRes, acceptedRes, deniedRes] = await Promise.all([
+      const [pendingRes, acceptedRes, deniedRes, totalRes] = await Promise.all([
         API.get("api/events?status=pending"),
         API.get("api/events?status=accepted"),
         API.get("api/events?status=denied"),
+        API.get("api/events"),
       ]);
 
       
@@ -28,12 +30,14 @@ export default function Dashboard() {
       pending: pendingRes.data.total || pendingRes.data.events.length || 0,
       accepted: acceptedRes.data.total || acceptedRes.data.events.length || 0,
       denied: deniedRes.data.total || deniedRes.data.events.length || 0,
+      total: totalRes.data.total || totalRes.data.events.length || 0,
 });
 
       console.log("Fetched data:", {
         pending: pendingRes.data.total,
         accepted: acceptedRes.data.total,
         denied: deniedRes.data.total,
+        total: totalRes.data.total,
       });
 
       console.log("Rendering dashboard with summary:", summary);
@@ -91,6 +95,7 @@ const handleView = (event) => {
         <Card title="Pending Event" count={summary.pending} />
         <Card title="Accepted Event" count={summary.accepted} />
         <Card title="Denied Event" count={summary.denied} />
+        <Card title="Total Event" count={summary.total} />
       </div>
 
       <h2 className="text-lg font-semibold text-gray-700 mb-3">Recent requested Event</h2>
