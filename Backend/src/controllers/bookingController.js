@@ -45,7 +45,7 @@ import db from '../models/index.js';
  *         name: limit
  *         schema:
  *           type: integer
- *           default: 10
+ *           default: 30
  *         required: false
  *         description: Number of records to return
  *       - in: query
@@ -143,7 +143,7 @@ export const getEvents = async (req, res) => {
       custId,
       venueId,
       status,
-      limit = 10,
+      limit = 30,
       offset = 0,
       sortBy = 'EventId',
       sortOrder = 'ASC'
