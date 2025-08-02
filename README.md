@@ -25,39 +25,37 @@ The portal includes:
 - **Database**: MySQL
 - **Version Control**: GitHub
 
-# Images and static files
-
-├── css/  
-├── js/  
-├── pages/  
-├── index.html  
-└── README.md # Project documentation
-
 ## 📁 Folder Structure
 
+# Event Management Admin Portal - Project Structure
+
+This document outlines the folder structure of the **Event_Managment_Admin_portal** project, formatted for clarity and easy navigation.
+
+```plaintext
 Event_Managment_Admin_portal/
+├── README.md
 ├── frontend/
 │   ├── index.html
 │   └── src/
-│       ├── assets/
-│       ├── components/        # Component cards for catering, events, and users
-│       ├── contexts/          # Store protected routes
-│       ├── pages/             # Admin pages (dashboard, event list, etc.)
-│       ├── utils/             # User authentication
-│       ├── api.js             # All APIs from backend
-│       ├── App.jsx
-│       └── index.css          # Stylesheets
-├── backend/
-│   ├── seed.js                # Faker for inserting data into database
-│   ├── server.js
-│   └── src/
-│       ├── config/            # Database, Swagger, and Multer (upload image) configuration
-│       ├── controllers/       # Controllers for user, events, and catering
-│       ├── middlewares/       # Middleware for authentication
-│       ├── models/            # Database models in Sequelize
-│       ├── routes/            # Routes for users, events, and catering
-│       └── uploads/           # Store images
-└── README.md
+│       ├── assets/           # Static assets like images and icons
+│       ├── components/       # Component cards for catering, events, and users
+│       ├── contexts/         # Store protected routes and context providers
+│       ├── pages/            # Admin pages (dashboard, event list, etc.)
+│       ├── utils/            # User authentication utilities
+│       ├── api.js            # All APIs from backend
+│       ├── App.jsx           # Main React component
+│       └── index.css         # Global stylesheets
+└── backend/
+    ├── seed.js              # Faker script for inserting data into the database
+    ├── server.js            # Entry point for the backend server
+    └── src/
+        ├── config/          # Database, Swagger, and Multer configuration
+        ├── controllers/     # Controllers for user, events, and catering
+        ├── middlewares/     # Middleware for authentication
+        ├── models/          # Sequelize database models
+        ├── routes/          # Routes for users, events, and catering
+        └── uploads/         # Stores uploaded images
+```
 
 ## 🚀 Getting Started
 
