@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import API from "../api"; 
+import API from "../api";
+import CustomerDetail from "./CustomerDetail.jsx";
+import UpdateCustomerForm from "./UpdateCustomr.jsx";
 
 export default function CustomerList() {
   const [customers, setCustomers] = useState([]);
@@ -8,6 +10,7 @@ export default function CustomerList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [mode, setMode] = useState(null); // 'view' or 'update'
 
   const fetchCustomers = async (page = 1) => {
     setLoading(true);
@@ -40,6 +43,32 @@ export default function CustomerList() {
       fetchCustomers(currentPage - 1);
     }
   };
+
+  const handleUpdateCustomer = async (updatedData) => {
+    try {
+      await API.put(`/api/customers/${selectedCustomer.custId}`, updatedData);
+      setSelectedCustomer(null);
+      setMode(null);
+      fetchCustomers(currentPage); // refresh list
+    } catch (err) {
+      console.error("Failed to update customer", err);
+      alert("Update failed.");
+    }
+  };
+
+  const handleDeleteCustomer = async (custId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this customer?");
+    if (!confirmDelete) return;
+
+    try {
+      await API.delete(`/api/customers/${custId}`);
+      fetchCustomers(currentPage); // Refresh the list
+    } catch (err) {
+      console.error("Failed to delete customer", err);
+      alert("Delete failed.");
+    }
+  };
+
 
   return (
     <div className="mt-6">
@@ -74,47 +103,49 @@ export default function CustomerList() {
                     <td className="py-4 px-6 text-sm text-gray-700">{cust.organizationName || "-"}</td>
                     <td className="py-4 px-6 text-sm text-gray-700">{cust.phoneNumber}</td>
                     <td className="py-4 px-6 text-sm text-gray-600">
-                    <div className="flex justify-end relative">
-                      <button
-                        className="inline-flex items-center px-3 py-1 text-sm font-medium bg-green-500 text-white rounded hover:bg-green-200"
-                        onClick={() => document.getElementById(`customer-menu-${cust.custId}`).classList.toggle("hidden")}
-                      >
-                        Actions▾
-                      </button>
-                      <div
-                        id={`customer-menu-${cust.custId}`}
-                        className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg hidden z-10"
-
-                      >
+                      <div className="flex justify-end relative">
                         <button
-                          onClick={() => {
-                            setSelectedCustomer(cust);
-                            document.getElementById(`customer-menu-${cust.custId}`).classList.add("hidden");
-                          }}
-                          className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50"
+                          className="inline-flex items-center px-3 py-1 text-sm font-medium bg-green-500 text-white rounded hover:bg-green-600"
+                          onClick={() => document.getElementById(`customer-menu-${cust.custId}`).classList.toggle("hidden")}
                         >
-                          View
+                          Actions▾
                         </button>
-                        <button
-                          onClick={() => {
-                            setSelectedCustomer(cust);
-                            document.getElementById(`customer-menu-${cust.custId}`).classList.add("hidden");
-                          }}
-                          className="block w-full text-left px-4 py-2 text-sm text-amber-600 hover:bg-amber-50"
+                        <div
+                          id={`customer-menu-${cust.custId}`}
+                          className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg hidden z-10"
                         >
-                          Update
-                        </button>
-                        <button
-                          onClick={() => {
-                            document.getElementById(`customer-menu-${cust.custId}`).classList.add("hidden");
-                          }}
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                        >
-                          Delete
-                        </button>
+                          <button
+                            onClick={() => {
+                              setSelectedCustomer(cust);
+                              setMode("view");
+                              document.getElementById(`customer-menu-${cust.custId}`).classList.add("hidden");
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50"
+                          >
+                            View
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedCustomer(cust);
+                              setMode("update");
+                              document.getElementById(`customer-menu-${cust.custId}`).classList.add("hidden");
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-amber-600 hover:bg-amber-50"
+                          >
+                            Update
+                          </button>
+                          <button
+                            onClick={() => {
+                              document.getElementById(`customer-menu-${cust.custId}`).classList.add("hidden");
+                              handleDeleteCustomer(cust.custId);
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </td>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -150,6 +181,29 @@ export default function CustomerList() {
             </button>
           </div>
         </>
+      )}
+
+      {/* Customer Detail Modal */}
+      {selectedCustomer && mode === "view" && (
+        <CustomerDetail
+          customer={selectedCustomer}
+          onClose={() => {
+            setSelectedCustomer(null);
+            setMode(null);
+          }}
+        />
+      )}
+
+      {/* Update Customer Modal */}
+      {selectedCustomer && mode === "update" && (
+        <UpdateCustomerForm
+          customer={selectedCustomer}
+          onSave={handleUpdateCustomer}
+          onCancel={() => {
+            setSelectedCustomer(null);
+            setMode(null);
+          }}
+        />
       )}
     </div>
   );

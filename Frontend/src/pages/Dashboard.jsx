@@ -9,6 +9,7 @@ export default function Dashboard() {
     pending: 0,
     accepted: 0,
     denied: 0,
+    total: 0,
   });
   const [eventToUpdate, setEventToUpdate] = useState(null);
   const [events, setEvents] = useState([]);
@@ -36,6 +37,7 @@ export default function Dashboard() {
         pending: pendingRes.data.total,
         accepted: acceptedRes.data.total,
         denied: deniedRes.data.total,
+        total: totalRes.data.total,
       });
 
       console.log("Rendering dashboard with summary:", summary);

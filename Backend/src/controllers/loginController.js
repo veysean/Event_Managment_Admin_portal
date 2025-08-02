@@ -96,6 +96,11 @@ export const login = async (req, res) => {
     try {
         const user = await db.User.findOne({ where: { email } });
         if (!user) return res.status(404).json({ error: 'User not found' });
+        
+        if (user.role !== 'admin') {
+            return res.status(403).json({ error: 'Access denied: Admins only' });
+        }
+
 
         const match = await bcrypt.compare(password, user.password);
         if (!match) return res.status(401).json({ error: 'Invalid credentials' });

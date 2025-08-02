@@ -220,7 +220,7 @@ export default function Catering() {
               <div className="flex flex-col md:flex-row gap-10 items-center">
                 {selectedCatering.imageUrl && (
                   <img
-                    src={`http://localhost:4000${selectedCatering.imageUrl}`}
+                    src={`http://localhost:3000${selectedCatering.imageUrl}`}
                     alt="Preview"
                     className="w-full md:w-64 h-auto rounded border border-slate-100 shadow-lg"
                   />
