@@ -87,7 +87,7 @@ export default function Event() {
     const handleDelete = async (id) => {
     try {
         await API.delete(`/api/events/${id}`);
-        setEvents((prev) => prev.filter((item) => item.id !== id));
+        setEvents((prev) => prev.filter((item) => item.eventId !== id));
     } catch (err) {
         console.error("Delete failed:", err);
     }

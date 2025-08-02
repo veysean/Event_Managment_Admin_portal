@@ -80,7 +80,7 @@ const handleView = (event) => {
     const handleDelete = async (id) => {
     try {
         await API.delete(`/api/events/${id}`);
-        setEvents((prev) => prev.filter((item) => item.id !== id));
+        setEvents((prev) => prev.filter((item) => item.eventId !== id));
     } catch (err) {
         console.error("Delete failed:", err);
     }
@@ -124,7 +124,7 @@ const handleView = (event) => {
                         event={event}
                         onView={handleView}
                         onUpdate={handleUpdate}
-                        onDelete={handleDelete}
+                        onDelete={() => handleDelete(event.eventId)}
                         />
                     ))}
                 </tbody>
