@@ -27,7 +27,7 @@ The portal includes:
 
 ## 📁 Folder Structure
 
-# Event Management Admin Portal - Project Structure
+### Event Management Admin Portal - Project Structure
 
 This document outlines the folder structure of the **Event_Managment_Admin_portal** project, formatted for clarity and easy navigation.
 
