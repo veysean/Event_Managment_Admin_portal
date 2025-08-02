@@ -45,7 +45,7 @@ import db from '../models/index.js';
  *         name: limit
  *         schema:
  *           type: integer
- *           default: 10
+ *           default: 30
  *         required: false
  *         description: Number of records to return
  *       - in: query
