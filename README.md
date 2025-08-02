@@ -37,26 +37,26 @@ The portal includes:
 
 Event_Managment_Admin_portal/
 ├── frontend/
-│ ├── src/
-| | ├──assets/
-| | ├──components/ #component cards for catering, events, and users
-| | ├──contexts/ # Store protected routes
-| | ├──pages/ # Admin pages (dashboard, event list, etc.)
-│ │ ├──utils/ # User authentication
-│ │ ├──api.js # all apis from backend
-│ │ ├──App.jsx
-│ │ ├──index.css # Stylesheets
-│ └── index.html # Main landing page
+│   ├── index.html
+│   └── src/
+│       ├── assets/
+│       ├── components/        # Component cards for catering, events, and users
+│       ├── contexts/          # Store protected routes
+│       ├── pages/             # Admin pages (dashboard, event list, etc.)
+│       ├── utils/             # User authentication
+│       ├── api.js             # All APIs from backend
+│       ├── App.jsx
+│       └── index.css          # Stylesheets
 ├── backend/
-│ ├── src/
-│ │ ├──config/ # Database, swagger and multer(uplaod image) configuration
-│ │ ├──controllers/ # Controllers for user, events, and catering
-│ │ ├──middlewares/ # Middleware for authentication
-│ │ ├──models/ # Database models in sequelize
-│ │ ├──routes/ # Routes for users, events, and catering
-│ │ ├──uploads/ # Store image
-│ ├── seed.js # Faker for insert data into database
-│ └── server.js
+│   ├── seed.js                # Faker for inserting data into database
+│   ├── server.js
+│   └── src/
+│       ├── config/            # Database, Swagger, and Multer (upload image) configuration
+│       ├── controllers/       # Controllers for user, events, and catering
+│       ├── middlewares/       # Middleware for authentication
+│       ├── models/            # Database models in Sequelize
+│       ├── routes/            # Routes for users, events, and catering
+│       └── uploads/           # Store images
 └── README.md
 
 ## 🚀 Getting Started
