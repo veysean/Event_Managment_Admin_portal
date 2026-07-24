@@ -213,6 +213,7 @@ export const updateCatering = async (req, res) => {
             catering
         });
     } catch (error) {
+      console.error("Update error:", error);
         res.status(500).json({ error: 'Failed to update catering', details: error.message });
     }
 };
